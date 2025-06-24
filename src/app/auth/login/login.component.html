@@ -1,0 +1,50 @@
+<div class="login-container">
+  <div class="go-back">
+    <button type="button" (click)="goHome()">Back to Home</button>
+  </div>
+  <h2>Login</h2>
+
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+    <!-- Email -->
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="email"
+      placeholder="Email"
+      required
+      email
+      #emailField="ngModel"
+    />
+    <div class="error" *ngIf="emailField.invalid && emailField.touched">
+      <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+      <span *ngIf="emailField.errors?.['email']">Enter a valid email.</span>
+    </div>
+
+    <!-- Password -->
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      placeholder="Password"
+      required
+      minlength="6"
+      #passwordField="ngModel"
+    />
+    <div class="error" *ngIf="passwordField.invalid && passwordField.touched">
+      <span *ngIf="passwordField.errors?.['required']">Password is required.</span>
+      <span *ngIf="passwordField.errors?.['minlength']">
+        Password must be at least 6 characters.
+      </span>
+    </div>
+
+    <!-- Form-level error -->
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <!-- Success message -->
+    <div class="success" *ngIf="success">Login successful! Redirecting...</div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  </form>
+
+  
+</div>
