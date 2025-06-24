@@ -1,0 +1,84 @@
+<!-- <app-header></app-header> -->
+
+<div class="dashboard">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <i class="fas fa-note-sticky"></i> QuickNotes
+    </div>
+    <nav>
+      <a routerLink="/notes" routerLinkActive="active">
+        <i class="fas fa-folder-open"></i> All Notes
+      </a>
+      <a routerLink="/archived" routerLinkActive="active">
+        <i class="fas fa-box-archive"></i> Archived
+      </a>
+      <a routerLink="/create" class="new-note">
+        <i class="fas fa-plus-circle"></i> Create
+      </a>
+      <button (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Toolbar with search icon -->
+<div class="toolbar">
+  <div class="search-wrapper">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      type="text"
+      class="search"
+      placeholder="Search notes..."
+      [(ngModel)]="searchTerm"
+      (input)="searchNotes()"
+    />
+  </div>
+</div>
+
+
+    <!-- Tags Filter -->
+    <div class="tags-filter" *ngIf="allNotes.length > 0">
+      <ng-container *ngFor="let note of allNotes">
+        <span
+          *ngFor="let tag of note.tags"
+          class="tag"
+          (click)="filterByTag(tag)"
+          [class.active]="selectedTag === tag"
+        >
+          #{{ tag }}
+        </span>
+      </ng-container>
+      <button *ngIf="selectedTag" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <!-- Notes Grid -->
+    <div class="notes-grid">
+      <div
+        class="note-card"
+        *ngFor="let note of filteredNotes; let i = index"
+        [ngClass]="'color-' + ((i % 5) + 1)"
+      >
+        <h3>{{ note.title }}</h3>
+        <p>{{ note.content | slice: 0:120 }}...</p>
+        <div class="tags">
+          <span *ngFor="let tag of note.tags">#{{ tag }}</span>
+        </div>
+        <div class="actions">
+          <button [routerLink]="['/notes', note.id]">
+            <i class="fas fa-pen"></i> Edit
+          </button>
+          <button (click)="archiveNote(note.id)">
+            <i class="fas fa-box-archive"></i> Archive
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredNotes.length === 0">
+      <p><i class="fas fa-inbox"></i> No notes found.</p>
+    </div>
+  </main>
+</div>
