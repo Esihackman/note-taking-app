@@ -1,0 +1,50 @@
+<div class="create-note-container">
+  <h2>Create New Note</h2>
+
+  <form #noteForm="ngForm" (ngSubmit)="onSubmit(noteForm)">
+    <!-- Title -->
+    <input
+      type="text"
+      name="title"
+      [(ngModel)]="title"
+      placeholder="Title"
+      required
+      #titleField="ngModel"
+    />
+    <div class="error" *ngIf="titleField.invalid && titleField.touched">
+      Title is required.
+    </div>
+
+    <!-- Content -->
+    <textarea
+      name="content"
+      [(ngModel)]="content"
+      placeholder="Note content"
+      required
+      rows="6"
+      #contentField="ngModel"
+    ></textarea>
+    <div class="error" *ngIf="contentField.invalid && contentField.touched">
+      Content is required.
+    </div>
+
+    <!-- Tags -->
+    <input
+      type="text"
+      name="tags"
+      [(ngModel)]="tags"
+      placeholder="Tags (comma-separated)"
+    />
+
+    <!-- Feedback -->
+    <div class="success" *ngIf="success">
+      ✅ Note created successfully!
+    </div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <button type="submit" [disabled]="noteForm.invalid">Save Note</button>
+      <button type="button" class="cancel" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

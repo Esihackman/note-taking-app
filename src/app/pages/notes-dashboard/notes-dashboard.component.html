@@ -13,7 +13,7 @@
       <a routerLink="/archived" routerLinkActive="active">
         <i class="fas fa-box-archive"></i> Archived
       </a>
-      <a routerLink="/create" class="new-note">
+      <a routerLink="/create-note" class="new-note">
         <i class="fas fa-plus-circle"></i> Create
       </a>
       <button (click)="logout()">
@@ -67,12 +67,16 @@
           <span *ngFor="let tag of note.tags">#{{ tag }}</span>
         </div>
         <div class="actions">
-          <button [routerLink]="['/notes', note.id]">
-            <i class="fas fa-pen"></i> Edit
-          </button>
+          <a [routerLink]="['/notes', note.id]" class="action-btn">
+  <i class="fas fa-pen"></i> Edit
+</a>
+
           <button (click)="archiveNote(note.id)">
             <i class="fas fa-box-archive"></i> Archive
           </button>
+          <button class="delete-btn" (click)="deleteNote(note.id)">
+    <i class="fas fa-trash"></i> Delete
+  </button>
         </div>
       </div>
     </div>
