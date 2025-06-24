@@ -1,0 +1,74 @@
+.signup-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  h2 {
+    color: #004721;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    input {
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .success {
+      color: green;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem;
+      font-size: 1rem;
+      background: #009c4a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background: #007c3a;
+      }
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .go-back {
+    margin-top: 1.5rem;
+    text-align: left;
+    button {
+      background: transparent;
+      border: none;
+      color: #004721;
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        color: #009c4a;
+      }
+    }
+  }
+}

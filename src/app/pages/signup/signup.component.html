@@ -1,0 +1,67 @@
+<div class="signup-container">
+  
+  <div class="go-back">
+    <button type="button" (click)="goToLogin()"> Back to Login</button>
+  </div>
+  <h2>Create Account</h2>
+
+  <form #signupForm="ngForm" (ngSubmit)="signup(signupForm)">
+    <input
+      type="text"
+      name="name"
+      [(ngModel)]="name"
+      placeholder="Full Name"
+      required
+      #nameField="ngModel"
+    />
+    <div class="error" *ngIf="nameField.invalid && nameField.touched">
+      Name is required.
+    </div>
+
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="email"
+      placeholder="Email"
+      required
+      email
+      #emailField="ngModel"
+    />
+    <div class="error" *ngIf="emailField.invalid && emailField.touched">
+      <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+      <span *ngIf="emailField.errors?.['email']">Enter a valid email.</span>
+    </div>
+
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      placeholder="Password"
+      required
+      minlength="6"
+      #passField="ngModel"
+    />
+    <div class="error" *ngIf="passField.invalid && passField.touched">
+      Password must be at least 6 characters.
+    </div>
+
+    <input
+      type="password"
+      name="confirmPassword"
+      [(ngModel)]="confirmPassword"
+      placeholder="Confirm Password"
+      required
+    />
+
+    <!-- Error message -->
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <!-- Success message -->
+    <div class="success" *ngIf="success">Signup successful! Redirecting...</div>
+
+    <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+  </form>
+<p>Already have an account? <a routerLink="/login">Login</a></p>
+
+ 
+</div>

@@ -13,7 +13,7 @@ constructor(private router: Router) {}
     this.router.navigate(['/login']);
   }
 
-  // goToSignup() {
-  //   this.router.navigate(['/signup']);
-  // }
+  goToSignup() {
+    this.router.navigate(['/signup']);
+  }
 }
