@@ -11,10 +11,9 @@
       <i class="fas fa-arrow-left"></i> Back
     </button>
 
-    <a [routerLink]="['/notes', note.id]" class="edit-btn">
-      <i class="fas fa-pen"></i> Edit
-    </a>
-
+   <a [routerLink]="['/notes', note?.id, 'edit']" class="edit-btn">
+  <i class="fas fa-pen"></i> Edit
+</a>
     <button class="delete-btn" (click)="deleteNote()">
       <i class="fas fa-trash"></i> Delete
     </button>

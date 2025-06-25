@@ -26,14 +26,14 @@ export class NoteService {
   }
 
   update(id: string, changes: Partial<Note>) {
-    const updated = this.notes.value.map(note =>
+    const updated = this.notes.value.map((note: Note) =>
       note.id === id ? { ...note, ...changes } : note
     );
     this.notes.next(updated);
   }
 
   delete(id: string) {
-    const filtered = this.notes.value.filter(note => note.id !== id);
+    const filtered = this.notes.value.filter((note: Note) => note.id !== id);
     this.notes.next(filtered);
   }
 
@@ -42,24 +42,27 @@ export class NoteService {
   }
 
   getNoteById(id: string): Note | undefined {
-    return this.notes.value.find(note => note.id === id);
+    return this.notes.value.find((note: Note) => note.id === id);
   }
 
   search(query: string): Note[] {
     const q = query.toLowerCase();
-    return this.notes.value.filter(
-      note =>
-        note.title.toLowerCase().includes(q) ||
-        note.content.toLowerCase().includes(q) ||
-        note.tags.some(tag => tag.toLowerCase().includes(q))
+    return this.notes.value.filter((note: Note) =>
+      note.title.toLowerCase().includes(q) ||
+      note.content.toLowerCase().includes(q) ||
+      note.tags.some((tag: string) => tag.toLowerCase().includes(q))
     );
   }
 
   getArchived(): Note[] {
-    return this.notes.value.filter(note => note.isAchieved);
+    return this.notes.value.filter((note: Note) => note.isAchieved);
   }
 
   getActive(): Note[] {
-    return this.notes.value.filter(note => !note.isAchieved);
+    return this.notes.value.filter((note: Note) => !note.isAchieved);
+  }
+
+  getById(id: string): Note | undefined {
+    return this.notes.value.find((note: Note) => note.id === id);
   }
 }
