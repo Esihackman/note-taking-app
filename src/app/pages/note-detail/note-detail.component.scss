@@ -1,0 +1,86 @@
+.note-detail {
+  max-width: 600px;
+  margin: 3rem auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #2c3e50;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    span {
+      background: #e0f7ea;
+      color: #007b5e;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+
+    button,
+    .edit-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .edit-btn {
+      background: #3498db;
+      color: #fff;
+
+      &:hover {
+        background: #2980b9;
+      }
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      color: #fff;
+
+      &:hover {
+        background: #c0392b;
+      }
+    }
+
+    button {
+      background: #95a5a6;
+      color: #fff;
+
+      &:hover {
+        background: #7f8c8d;
+      }
+    }
+  }
+

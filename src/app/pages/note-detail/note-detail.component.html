@@ -1,0 +1,27 @@
+<div *ngIf="note" class="note-detail">
+  <h2><i class="fas fa-sticky-note"></i> {{ note.title }}</h2>
+  <p class="note-content">{{ note.content }}</p>
+
+  <div class="tags">
+    <span *ngFor="let tag of note.tags"><i class="fas fa-tag"></i> {{ tag }}</span>
+  </div>
+
+  <div class="actions">
+    <button (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+
+    <a [routerLink]="['/notes', note.id]" class="edit-btn">
+      <i class="fas fa-pen"></i> Edit
+    </a>
+
+    <button class="delete-btn" (click)="deleteNote()">
+      <i class="fas fa-trash"></i> Delete
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!note" class="not-found">
+  <p><i class="fas fa-exclamation-circle"></i> Note not found.</p>
+  <button (click)="goBack()"><i class="fas fa-arrow-left"></i> Go Back</button>
+</div>

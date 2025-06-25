@@ -4,7 +4,7 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="logo">
-      <i class="fas fa-note-sticky"></i> QuickNotes
+      <i class="fas fa-note-sticky"></i> NoteNest
     </div>
     <nav>
       <a routerLink="/notes" routerLinkActive="active">
@@ -67,9 +67,11 @@
           <span *ngFor="let tag of note.tags">#{{ tag }}</span>
         </div>
         <div class="actions">
-          <a [routerLink]="['/notes', note.id]" class="action-btn">
-  <i class="fas fa-pen"></i> Edit
+         <a [routerLink]="['/notes', note.id]" class="view-btn">
+  <i class="fas fa-eye"></i> View
 </a>
+
+
 
           <button (click)="archiveNote(note.id)">
             <i class="fas fa-box-archive"></i> Archive
