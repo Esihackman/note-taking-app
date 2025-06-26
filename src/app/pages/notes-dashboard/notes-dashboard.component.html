@@ -4,6 +4,26 @@
     <div class="logo">
       <i class="fas fa-note-sticky"></i> NoteNest
     </div>
+    <button class="menu-toggle" (click)="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
+
+    <!-- Theme Toggle with Font Awesome -->
+<button class="theme-btn" (click)="toggleTheme()">
+  <i class="fas" [ngClass]="isDarkTheme ? 'fa-sun' : 'fa-moon'"></i>
+  {{ isDarkTheme ? 'Light Mode' : 'Dark Mode' }}
+</button>
+<!-- Font Preference -->
+<div class="font-settings">
+  <label for="font-select">Font:</label>
+  <select id="font-select" [(ngModel)]="fontPreference" (change)="changeFont($event)">
+    <option value="sans-serif">Sans-serif</option>
+    <option value="serif">Serif</option>
+    <option value="monospace">Monospace</option>
+  </select>
+</div>
+
+
     <nav>
       <a routerLink="/notes" routerLinkActive="active">
         <i class="fas fa-folder-open"></i> All Notes
@@ -22,6 +42,7 @@
 
   <!-- Main Content -->
   <main class="main-content">
+    <!-- Search Bar -->
     <div class="toolbar">
       <div class="search-wrapper">
         <i class="fas fa-search search-icon"></i>
@@ -30,8 +51,7 @@
           class="search"
           placeholder="Search notes..."
           [(ngModel)]="searchTerm"
-          (input)="searchNotes()"
-        />
+          (input)="searchNotes()" />
       </div>
     </div>
 
@@ -44,7 +64,7 @@
           (click)="filterByTag(tag)"
           [class.active]="selectedTag === tag"
         >
-          #{{ tag }}
+          {{ tag }}
         </span>
       </ng-container>
       <button *ngIf="selectedTag" (click)="resetFilters()">Reset</button>
@@ -54,31 +74,38 @@
     <div class="notes-grid">
       <div
         class="note-card"
-        *ngFor="let note of filteredNotes; let i = index"
+        *ngFor="let note of filteredNotes; trackBy: trackById; let i = index"
         [ngClass]="'color-' + ((i % 5) + 1)"
       >
         <h3>{{ note.title }}</h3>
         <p>{{ note.content | slice: 0:120 }}...</p>
+
         <div class="tags">
-          <span *ngFor="let tag of note.tags">#{{ tag }}</span>
+          <span *ngFor="let tag of note.tags">{{ tag }}</span>
         </div>
+
         <div class="actions">
           <a [routerLink]="['/notes', note.id]" class="view-btn">
             <i class="fas fa-eye"></i> View
           </a>
-          <!-- <a [routerLink]="['/notes', note.id, 'edit']" class="edit-btn">
-            <i class="fas fa-pen"></i> Edit
-          </a> -->
-          <button (click)="archiveNote(note.id)">
-            <i class="fas fa-box-archive"></i> Archive
-          </button>
-          <button class="delete-btn" (click)="deleteNote(note.id)">
-            <i class="fas fa-trash"></i> Delete
-          </button>
+
+          <div class="toggle-wrapper">
+           <label class="switch" tabindex="0" aria-label="Toggle archive for note">
+  <input
+    type="checkbox"
+    [checked]="note.isArchived"
+    (change)="toggleArchive(note)"
+  />
+  <span class="slider"></span>
+</label>
+
+            <span class="toggle-label">{{ note.isArchived ? 'Unarchive' : 'Archive' }}</span>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Empty State -->
     <div class="empty-state" *ngIf="filteredNotes.length === 0">
       <p><i class="fas fa-inbox"></i> No notes found.</p>
     </div>

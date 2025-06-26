@@ -20,27 +20,30 @@ export class CreateNoteComponent {
   constructor(private noteService: NoteService, private router: Router) {}
 
   onSubmit(form: NgForm) {
-    if (!form.valid) return;
+  if (!form.valid) return;
 
-    const tagArray = this.tags
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(tag => tag);
+  const tagArray = this.tags
+    .split(',')
+    .map(tag => tag.trim())
+    .filter(tag => tag);
 
-    this.noteService.create({
-      title: this.title,
-      content: this.content,
-      tags: tagArray,
-    });
+  this.noteService.createNote({
+    id: crypto.randomUUID(), // ✅ Ensure unique ID
+    title: this.title,
+    content: this.content,
+    tags: tagArray,
+    isArchived: false,
+    createdAt: new Date()
+  });
 
-    this.success = true;
+  this.success = true;
 
-    setTimeout(() => {
-      this.router.navigate(['/notes']);
-    }, 1000);
-  }
-
-  cancel() {
+  setTimeout(() => {
     this.router.navigate(['/notes']);
-  }
+  }, 1000);
+}
+cancel() {
+  this.router.navigate(['/notes']);
+}
+
 }

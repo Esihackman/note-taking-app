@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { NoteService } from '../../services/note.service';
 import { Note } from '../../models/note.model';
 
 @Component({
   selector: 'app-notes-dashboard',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './notes-dashboard.component.html',
   styleUrls: ['./notes-dashboard.component.scss']
 })
@@ -16,55 +16,112 @@ export class NotesDashboardComponent implements OnInit {
   allNotes: Note[] = [];
   filteredNotes: Note[] = [];
   searchTerm: string = '';
-  selectedTag: string = '';
+  selectedTag: string | null = null;
 
-  constructor(
-    private noteService: NoteService,
-    private router: Router // ✅ Needed for logout redirect
-  ) {}
+  isDarkTheme: boolean = false;
+  fontPreference: string = 'sans-serif';
+
+  constructor(private noteService: NoteService) {}
 
   ngOnInit(): void {
-    this.noteService.notes$.subscribe(notes => {
+    // Load notes
+    this.noteService.notes$.subscribe((notes: Note[]) => {
       this.allNotes = notes;
-      this.filteredNotes = this.filterNotes(notes);
+      this.filteredNotes = [...notes];
     });
+
+    // Load and apply theme
+    const savedTheme = localStorage.getItem('theme');
+    this.isDarkTheme = savedTheme === 'dark';
+    this.applyTheme(this.isDarkTheme);
+
+    // Load and apply font preference
+    const savedFont = localStorage.getItem('font');
+    this.fontPreference = savedFont || 'sans-serif';
+    this.applyFont(this.fontPreference);
   }
 
+  toggleTheme(): void {
+    this.isDarkTheme = !this.isDarkTheme;
+    localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
+    this.applyTheme(this.isDarkTheme);
+  }
+
+  applyTheme(isDark: boolean): void {
+    document.body.classList.toggle('dark-theme', isDark);
+  }
+
+  changeFont(event: Event): void {
+    const selectedFont = (event.target as HTMLSelectElement).value;
+    this.fontPreference = selectedFont;
+    localStorage.setItem('font', selectedFont);
+    this.applyFont(selectedFont);
+  }
+
+ applyFont(font: string): void {
+  const fontMap: { [key: string]: string } = {
+    'sans-serif': 'Segoe UI, sans-serif',
+    'serif': 'Georgia, serif',
+    'monospace': 'Courier New, monospace',
+  };
+
+  const selectedFont = fontMap[font] || 'Segoe UI, sans-serif';
+  document.body.className = `font-${font}`;
+
+  console.log('Font applied:', selectedFont);
+}
+
+
+sidebarVisible = false;
+
+toggleSidebar(): void {
+  this.sidebarVisible = !this.sidebarVisible;
+}
+
+
   searchNotes(): void {
-    this.filteredNotes = this.filterNotes(this.allNotes);
+    const term = this.searchTerm.toLowerCase();
+
+    this.filteredNotes = this.allNotes.filter(note => {
+      const titleMatch = note.title.toLowerCase().includes(term);
+      const contentMatch = note.content.toLowerCase().includes(term);
+      const tagMatch = note.tags?.some(tag => tag.toLowerCase().includes(term));
+      return titleMatch || contentMatch || tagMatch;
+    });
+
+    if (this.selectedTag) {
+      this.filteredNotes = this.filteredNotes.filter(note =>
+        note.tags.includes(this.selectedTag!)
+      );
+    }
   }
 
   filterByTag(tag: string): void {
     this.selectedTag = tag;
-    this.filteredNotes = this.allNotes.filter(note => note.tags.includes(tag));
+    this.filteredNotes = this.allNotes.filter(note =>
+      note.tags.includes(tag)
+    );
   }
 
   resetFilters(): void {
-    this.selectedTag = '';
-    this.filteredNotes = this.allNotes;
+    this.selectedTag = null;
+    this.searchTerm = '';
+    this.filteredNotes = [...this.allNotes];
   }
 
-  archiveNote(id: string): void {
-    this.noteService.archive(id, true);
-  }
-
-  deleteNote(id: string): void {
-    if (confirm('Are you sure you want to delete this note?')) {
-      this.noteService.delete(id);
+  toggleArchive(note: Note): void {
+    if (note.isArchived) {
+      this.noteService.unarchiveNote(note.id);
+    } else {
+      this.noteService.archiveNote(note.id);
     }
   }
 
-  logout(): void {
-    localStorage.removeItem('user'); // Change this key if using a different token
-    this.router.navigate(['/login']);
+  trackById(index: number, note: Note): string {
+    return note.id;
   }
 
-  private filterNotes(notes: Note[]): Note[] {
-    const q = this.searchTerm.toLowerCase();
-    return notes.filter(note =>
-      note.title.toLowerCase().includes(q) ||
-      note.content.toLowerCase().includes(q) ||
-      note.tags.some(tag => tag.toLowerCase().includes(q))
-    );
+  logout(): void {
+    console.log('Logging out...');
   }
 }

@@ -1,0 +1,28 @@
+ <button class="back-btn" (click)="goBack()">
+  ← Back to Dashboard
+</button>
+
+<div class="notes-grid">
+ 
+  <div *ngFor="let note of archivedNotes" class="note-card">
+    <h3>{{ note.title }}</h3>
+    <p>{{ note.content }}</p>
+
+    <div class="tags">
+      <span *ngFor="let tag of note.tags" class="tag">#{{ tag }}</span>
+    </div>
+
+   <div class="toggle-wrapper">
+  <label class="switch">
+    <input
+      type="checkbox"
+      [checked]="note.isArchived"
+      (change)="toggleArchive(note)"
+    />
+    <span class="slider"></span>
+  </label>
+  <span class="toggle-label">{{ note.isArchived ? 'Unarchive' : 'Archive' }}</span>
+</div>
+
+  </div>
+</div>

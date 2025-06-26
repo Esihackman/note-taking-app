@@ -29,7 +29,7 @@ export class EditNoteComponent {
 
   updateNote() {
     if (this.note) {
-      this.noteService.update(this.note.id, this.note);
+      this.noteService.updateNote( this.note);
       this.successMessage = 'Note updated successfully!';
       // Optional: Clear message after a few seconds
       setTimeout(() => {

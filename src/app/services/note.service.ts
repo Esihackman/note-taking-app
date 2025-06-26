@@ -2,67 +2,75 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Note } from '../models/note.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class NoteService {
-  private notes = new BehaviorSubject<Note[]>([]);
-  notes$ = this.notes.asObservable();
+  private notesSubject = new BehaviorSubject<Note[]>([]);
+  notes$ = this.notesSubject.asObservable();
 
-  constructor() {}
-
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  constructor() {
+    // Optional: Load from localStorage or set dummy data
+    const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+    this.notesSubject.next(savedNotes);
   }
 
-  create(note: Partial<Note>) {
-    const newNote: Note = {
-      id: this.generateId(),
-      title: note.title || '',
-      content: note.content || '',
-      tags: note.tags || [],
-      isAchieved: false,
-      createdAt: new Date(),
-    };
-    this.notes.next([...this.notes.value, newNote]);
+  getNotes(): Note[] {
+    return this.notesSubject.getValue();
   }
 
-  update(id: string, changes: Partial<Note>) {
-    const updated = this.notes.value.map((note: Note) =>
-      note.id === id ? { ...note, ...changes } : note
+  getArchivedNotes(): Note[] {
+    return this.notesSubject.getValue().filter((note: Note) => note.isArchived);
+  }
+
+  createNote(note: Note): void {
+  const currentNotes = this.notesSubject.getValue();
+  const updatedNotes = [...currentNotes, note];
+  this.notesSubject.next(updatedNotes);
+  localStorage.setItem('notes', JSON.stringify(updatedNotes));
+}
+
+
+ archiveNote(id: string): void {
+  const notes = this.notesSubject.getValue();
+  console.log('Archiving Note ID:', id);
+  notes.forEach(note => console.log('note.id =', note.id));
+
+  const updatedNotes = notes.map((note: Note) =>
+    note.id === id ? { ...note, isArchived: true } : note
+  );
+  this.notesSubject.next(updatedNotes);
+  localStorage.setItem('notes', JSON.stringify(updatedNotes));
+}
+
+
+
+
+
+  unarchiveNote(id: string): void {
+  const updatedNotes = this.notesSubject.getValue().map((note: Note) =>
+    note.id === id ? { ...note, isArchived: false } : note
+  );
+  this.notesSubject.next(updatedNotes);
+  localStorage.setItem('notes', JSON.stringify(updatedNotes));
+}
+
+
+  deleteNote(id: string): void {
+    const updatedNotes = this.notesSubject.getValue().filter((note: Note) => note.id !== id);
+    this.notesSubject.next(updatedNotes);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
+  }
+
+  updateNote(updatedNote: Note): void {
+    const updatedNotes = this.notesSubject.getValue().map((note: Note) =>
+      note.id === updatedNote.id ? updatedNote : note
     );
-    this.notes.next(updated);
+    this.notesSubject.next(updatedNotes);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
   }
-
-  delete(id: string) {
-    const filtered = this.notes.value.filter((note: Note) => note.id !== id);
-    this.notes.next(filtered);
-  }
-
-  archive(id: string, isAchieved: boolean) {
-    this.update(id, { isAchieved });
-  }
-
   getNoteById(id: string): Note | undefined {
-    return this.notes.value.find((note: Note) => note.id === id);
-  }
+  return this.notesSubject.getValue().find((note: Note) => note.id === id);
+}
 
-  search(query: string): Note[] {
-    const q = query.toLowerCase();
-    return this.notes.value.filter((note: Note) =>
-      note.title.toLowerCase().includes(q) ||
-      note.content.toLowerCase().includes(q) ||
-      note.tags.some((tag: string) => tag.toLowerCase().includes(q))
-    );
-  }
-
-  getArchived(): Note[] {
-    return this.notes.value.filter((note: Note) => note.isAchieved);
-  }
-
-  getActive(): Note[] {
-    return this.notes.value.filter((note: Note) => !note.isAchieved);
-  }
-
-  getById(id: string): Note | undefined {
-    return this.notes.value.find((note: Note) => note.id === id);
-  }
 }
