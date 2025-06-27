@@ -3,7 +3,9 @@
   <p class="note-content">{{ note.content }}</p>
 
   <div class="tags">
-    <span *ngFor="let tag of note.tags"><i class="fas fa-tag"></i> {{ tag }}</span>
+    <span *ngFor="let tag of note.tags">
+      <i class="fas fa-tag"></i> {{ tag }}
+    </span>
   </div>
 
   <div class="actions">
@@ -11,14 +13,13 @@
       <i class="fas fa-arrow-left"></i> Back
     </button>
 
-   <a [routerLink]="['/notes', note?.id, 'edit']" class="edit-btn">
-  <i class="fas fa-pen"></i> Edit
-</a>
-    <!-- Inside the .actions section -->
-<button class="delete-btn" (click)="openDeleteModal()">
-  <i class="fas fa-trash"></i> Delete
-</button>
+    <a [routerLink]="['/notes', note?.id, 'edit']" class="edit-btn">
+      <i class="fas fa-pen"></i> Edit
+    </a>
 
+    <button class="delete-btn" (click)="openDeleteModal()">
+      <i class="fas fa-trash"></i> Delete
+    </button>
   </div>
 </div>
 
@@ -27,7 +28,9 @@
   <button (click)="goBack()"><i class="fas fa-arrow-left"></i> Go Back</button>
 </div>
 
+<!-- ✅ Modal only shows when triggered -->
 <div
+  *ngIf="showDeleteModal"
   class="modal-backdrop"
   role="dialog"
   aria-modal="true"
@@ -42,6 +45,3 @@
     </div>
   </div>
 </div>
-
-
-
