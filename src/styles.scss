@@ -15,3 +15,253 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9f9;
 }
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: #009c4a;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  color: #333;
+}
+:focus {
+  outline: 2px solid #009c4a;
+  outline-offset: 2px;
+}
+
+.dark-theme {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.dark-theme .sidebar {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+.dark-theme .main-content {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.dark-theme .note-card {
+  background-color: #1a1a1a !important;
+  color: #eee !important;
+  border-left-color: #333 !important;
+}
+
+.dark-theme .note-card .tags span {
+  background: #333 !important;
+  color: #ccc !important;
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background: #111 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+// Preserve card background colors even in dark mode
+.note-card.color-1 {
+  background-color: #fff9c4;
+  border-left-color: #fbc02d;
+  color: #333;
+}
+
+.note-card.color-2 {
+  background-color: #c8e6c9;
+  border-left-color: #43a047;
+  color: #333;
+}
+
+.note-card.color-3 {
+  background-color: #bbdefb;
+  border-left-color: #1e88e5;
+  color: #333;
+}
+
+.note-card.color-4 {
+  background-color: #f8bbd0;
+  border-left-color: #e91e63;
+  color: #333;
+}
+
+.note-card.color-5 {
+  background-color: #e1bee7;
+  border-left-color: #8e24aa;
+  color: #333;
+}
+
+// In dark theme, preserve colors and override only text if needed
+.dark-theme .note-card.color-1,
+.dark-theme .note-card.color-2,
+.dark-theme .note-card.color-3,
+.dark-theme .note-card.color-4,
+.dark-theme .note-card.color-5 {
+  color: #222; // or keep #333 if readable
+}
+
+// Optional: apply darker shades to text if needed for more contrast
+.dark-theme .note-card.color-3 h3,
+.dark-theme .note-card.color-3 p {
+  color: #111;
+}
+.dark-theme {
+  color: #fff;
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme h6,
+.dark-theme p,
+.dark-theme span,
+.dark-theme label,
+.dark-theme a,
+.dark-theme button {
+  color: #ffffff !important;
+}
+
+.dark-theme .note-card {
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+}
+
+.dark-theme .note-card .tags span {
+  background-color: #333;
+  color: #ccc;
+}
+
+.dark-theme .sidebar {
+  background-color: #111;
+  color: #f1f1f1;
+}
+
+.dark-theme .main-content {
+  background-color: #000;
+  color: #fff;
+}
+
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+  border-color: #444;
+}
+
+.dark-theme .search-icon {
+  color: #aaa;
+}
+
+.dark-theme .tag {
+  background-color: #333;
+  color: #ddd;
+}
+/* Tag style in light mode */
+.tag,
+.note-card .tags span {
+  background-color: #e0f7ea;
+  color: #007b5e;
+}
+
+/* Tag style inside note card for dark mode */
+.dark-theme .tag,
+.dark-theme .note-card .tags span {
+  background-color: #2a2a2a !important;
+  color: #90ee90 !important; /* Light green text */
+  border: 1px solid #444;
+}
+.font-settings {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    color: inherit;
+    font-size: 0.9rem;
+  }
+
+  select {
+    padding: 0.3rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+  }
+}
+
+.dark-theme .font-settings select {
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+  border-color: #444;
+}
+body, input, textarea, button, select, a, p, h1, h2, h3, h4, h5, h6, span, label {
+  font-family: inherit;
+}
+html, body {
+  font-family: 'Segoe UI', sans-serif; // or default you want
+}
+.font-serif { font-family: Georgia, serif; }
+.font-sans-serif { font-family: 'Segoe UI', sans-serif; }
+.font-monospace { font-family: 'Courier New', monospace; }
+
+:focus {
+  outline: 2px solid #009c4a;
+  outline-offset: 2px;
+}
+
+button:hover,
+a:hover {
+  background-color: rgba(0, 156, 74, 0.1);
+}

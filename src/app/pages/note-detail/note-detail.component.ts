@@ -29,7 +29,7 @@ export class NoteDetailComponent implements OnInit {
 
   deleteNote() {
     if (this.note && confirm('Are you sure you want to delete this note?')) {
-      this.noteService.delete(this.note.id);
+      this.noteService.deleteNote(this.note.id);
       this.router.navigate(['/notes']);
     }
   }
@@ -37,4 +37,22 @@ export class NoteDetailComponent implements OnInit {
   goBack() {
     this.router.navigate(['/notes']);
   }
+  showDeleteModal = false;
+
+openDeleteModal(): void {
+  this.showDeleteModal = true;
+}
+
+cancelDelete(): void {
+  this.showDeleteModal = false;
+}
+
+confirmDelete(): void {
+  if (this.note?.id) {
+    this.noteService.deleteNote(this.note.id);
+    this.router.navigate(['/notes']);
+  }
+}
+
+
 }
