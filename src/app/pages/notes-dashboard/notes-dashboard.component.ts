@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { NoteService } from '../../services/note.service';
 import { Note } from '../../models/note.model';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-notes-dashboard',
@@ -12,7 +13,7 @@ import { Note } from '../../models/note.model';
   templateUrl: './notes-dashboard.component.html',
   styleUrls: ['./notes-dashboard.component.scss']
 })
-export class NotesDashboardComponent implements OnInit {
+export class NotesDashboardComponent implements OnInit, OnDestroy {
   allNotes: Note[] = [];
   filteredNotes: Note[] = [];
   searchTerm: string = '';
@@ -21,24 +22,52 @@ export class NotesDashboardComponent implements OnInit {
   isDarkTheme: boolean = false;
   fontPreference: string = 'sans-serif';
 
-  constructor(private noteService: NoteService) {}
+  isMobile: boolean = false;
+  showDropdownMenu: boolean = false;
+
+  private resizeListener = () => this.checkDevice();
+
+  constructor(
+    private noteService: NoteService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Load notes
+    this.checkDevice();
+    window.addEventListener('resize', this.resizeListener);
+
     this.noteService.notes$.subscribe((notes: Note[]) => {
       this.allNotes = notes;
       this.filteredNotes = [...notes];
     });
 
-    // Load and apply theme
     const savedTheme = localStorage.getItem('theme');
     this.isDarkTheme = savedTheme === 'dark';
     this.applyTheme(this.isDarkTheme);
 
-    // Load and apply font preference
     const savedFont = localStorage.getItem('font');
     this.fontPreference = savedFont || 'sans-serif';
     this.applyFont(this.fontPreference);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeListener);
+  }
+
+  checkDevice(): void {
+    this.isMobile = window.innerWidth <= 768;
+    if (!this.isMobile) {
+      this.showDropdownMenu = false; // hide dropdown if moving to desktop
+    }
+  }
+
+  toggleDropdown(): void {
+    this.showDropdownMenu = !this.showDropdownMenu;
+  }
+
+  closeDropdown(): void {
+    this.showDropdownMenu = false;
   }
 
   toggleTheme(): void {
@@ -58,30 +87,13 @@ export class NotesDashboardComponent implements OnInit {
     this.applyFont(selectedFont);
   }
 
- applyFont(font: string): void {
-  const fontMap: { [key: string]: string } = {
-    'sans-serif': 'Segoe UI, sans-serif',
-    'serif': 'Georgia, serif',
-    'monospace': 'Courier New, monospace',
-  };
-
-  const selectedFont = fontMap[font] || 'Segoe UI, sans-serif';
-  document.body.className = `font-${font}`;
-
-  console.log('Font applied:', selectedFont);
-}
-
-
-sidebarVisible = false;
-
-toggleSidebar(): void {
-  this.sidebarVisible = !this.sidebarVisible;
-}
-
+  applyFont(font: string): void {
+    document.body.classList.remove('font-sans-serif', 'font-serif', 'font-monospace');
+    document.body.classList.add(`font-${font}`);
+  }
 
   searchNotes(): void {
     const term = this.searchTerm.toLowerCase();
-
     this.filteredNotes = this.allNotes.filter(note => {
       const titleMatch = note.title.toLowerCase().includes(term);
       const contentMatch = note.content.toLowerCase().includes(term);
@@ -122,6 +134,7 @@ toggleSidebar(): void {
   }
 
   logout(): void {
-    console.log('Logging out...');
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

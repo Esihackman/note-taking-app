@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'authToken';
+
+  constructor(private router: Router) {}
 
   login(email: string, password: string): boolean {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -13,7 +16,7 @@ export class AuthService {
 
     if (matchedUser) {
       localStorage.setItem(this.TOKEN_KEY, 'mock-token-12345');
-      localStorage.setItem('currentUser', JSON.stringify(matchedUser)); // Optional: Save user
+      localStorage.setItem('currentUser', JSON.stringify(matchedUser)); 
       return true;
     }
 
@@ -23,6 +26,9 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('currentUser');
+
+    // ✅ Redirect to login or landing page
+    this.router.navigate(['/login']); // or use '/' for landing
   }
 
   isAuthenticated(): boolean {
