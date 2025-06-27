@@ -17,5 +17,5 @@ export const routes: Routes = [
   {path: 'create-note', component: CreateNoteComponent, canActivate: [AuthGuard] },
   { path: 'notes/:id', component: NoteDetailComponent, canActivate: [AuthGuard] },
   { path: 'notes/:id/edit', component: EditNoteComponent, canActivate: [AuthGuard] },
-   {path: 'archived', component: ArchivedNotesComponent},
+   {path: 'archived', component: ArchivedNotesComponent, canActivate: [AuthGuard] },
 ];
