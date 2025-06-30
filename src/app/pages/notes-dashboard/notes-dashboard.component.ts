@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { Subscription } from 'rxjs'; // <-- ✅ Add this
 import { NoteService } from '../../services/note.service';
 import { Note } from '../../models/note.model';
 import { AuthService } from '../../auth/auth.service';
@@ -25,6 +26,7 @@ export class NotesDashboardComponent implements OnInit, OnDestroy {
   isMobile: boolean = false;
   showDropdownMenu: boolean = false;
 
+  private notesSubscription!: Subscription; 
   private resizeListener = () => this.checkDevice();
 
   constructor(
@@ -37,7 +39,7 @@ export class NotesDashboardComponent implements OnInit, OnDestroy {
     this.checkDevice();
     window.addEventListener('resize', this.resizeListener);
 
-    this.noteService.notes$.subscribe((notes: Note[]) => {
+    this.notesSubscription = this.noteService.notes$.subscribe((notes: Note[]) => {
       this.allNotes = notes;
       this.filteredNotes = [...notes];
     });
@@ -53,12 +55,15 @@ export class NotesDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.resizeListener);
+    if (this.notesSubscription) {
+      this.notesSubscription.unsubscribe(); // <-- ✅ Unsubscribing
+    }
   }
 
   checkDevice(): void {
     this.isMobile = window.innerWidth <= 768;
     if (!this.isMobile) {
-      this.showDropdownMenu = false; // hide dropdown if moving to desktop
+      this.showDropdownMenu = false;
     }
   }
 

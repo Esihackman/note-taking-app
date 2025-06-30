@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NoteService } from '../../services/note.service';
 import { Note } from '../../models/note.model';
-import { Router } from '@angular/router'; // ✅ Import Router
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-archived-notes',
@@ -16,7 +16,7 @@ export class ArchivedNotesComponent implements OnInit {
 
   constructor(
     private noteService: NoteService,
-    private router: Router // ✅ Inject it here
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +40,6 @@ export class ArchivedNotesComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/notes']); // ✅ Now works correctly
+    this.router.navigate(['/notes']); 
   }
 }

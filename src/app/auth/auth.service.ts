@@ -27,8 +27,8 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('currentUser');
 
-    // ✅ Redirect to login or landing page
-    this.router.navigate(['/login']); // or use '/' for landing
+    
+    this.router.navigate(['/login']); 
   }
 
   isAuthenticated(): boolean {

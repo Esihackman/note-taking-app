@@ -28,7 +28,7 @@ export class CreateNoteComponent {
     .filter(tag => tag);
 
   this.noteService.createNote({
-    id: crypto.randomUUID(), // ✅ Ensure unique ID
+    id: crypto.randomUUID(), 
     title: this.title,
     content: this.content,
     tags: tagArray,

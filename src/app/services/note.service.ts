@@ -10,7 +10,7 @@ export class NoteService {
   notes$ = this.notesSubject.asObservable();
 
   constructor() {
-    // Optional: Load from localStorage or set dummy data
+    
     const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
     this.notesSubject.next(savedNotes);
   }
